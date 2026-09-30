@@ -19,7 +19,7 @@
         "mrclay/minify": "^2.1.6",
         "dapphp/securimage": "dev-nextgen",
         "erusev/parsedown":  "^1.7.4",
-        "geoip2/geoip2": "^2.13"
+        "geoip2/geoip2": "^3.4"
     },
     "autoload": {
         "classmap": ["inc/"],
