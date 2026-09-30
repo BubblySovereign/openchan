@@ -4,11 +4,11 @@
     "type": "project",
     "config": {
         "platform": {
-            "php": "8.1"
+            "php": "8.3"
         }
     },
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.3",
         "ext-mbstring": ">=7.4",
         "ext-gd": ">=7.4",
         "ext-pdo": ">=7.4",
