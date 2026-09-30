@@ -16,7 +16,7 @@
         "phpmyadmin/twig-i18n-extension": "^5.0.2",
         "lifo/ip": "^1.0",
         "gettext/gettext": "^5.5",
-        "mrclay/minify": "^2.1.6",
+        "mrclay/minify": "^4.0.2",
         "dapphp/securimage": "dev-nextgen",
         "erusev/parsedown":  "^1.7.4",
         "geoip2/geoip2": "^3.4"
