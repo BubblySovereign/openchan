@@ -106,25 +106,50 @@ $(function(){
     storage_save(st);
     return is_threadwatched(bc, thread);
   };
+  var sanitize_board_name = function(board) {
+    if (typeof board !== "string") {
+      return null;
+    }
+    board = board.replace(/^\/+|\/+$/g, "");
+    if (!/^[A-Za-z0-9_-]+$/.test(board)) {
+      return null;
+    }
+    return board;
+  };
   var construct_watchlist_for = function(board, variant) {
+    board = sanitize_board_name(board);
     var list = $("<div class='boardlist top cb-menu watch-menu'></div>");
+    if (!board) {
+      return list;
+    }
     list.attr("data-board", board);
 
     if (storage()[board] && storage()[board].threads)
     for (var tid in storage()[board].threads) {
       var newposts = "(0)";
+      var newpostsIsIcon = false;
       if (status && status[board] && status[board].threads && status[board].threads[tid]) {
         if (status[board].threads[tid] == -404) {
-          newposts = "<i class='fa fa-ban-circle'></i>";
+          newpostsIsIcon = true;
         }
         else {
           newposts = "("+status[board].threads[tid]+")";
         }
       }
 
+      var href = ((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"));
       var tag;
       if (variant == 'desktop') {
-        tag = $("<a href='"+((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"))+"'><span>#"+tid+"</span><span class='cb-uri watch-remove'>"+newposts+"</span>");
+        tag = $("<a></a>").attr("href", href);
+        $("<span></span>").text("#" + tid).appendTo(tag);
+
+        var removeSpanDesktop = $("<span class='cb-uri watch-remove'></span>").appendTo(tag);
+        if (newpostsIsIcon) {
+          $("<i class='fa fa-ban-circle'></i>").appendTo(removeSpanDesktop);
+        } else {
+          removeSpanDesktop.text(newposts);
+        }
+
 	tag.find(".watch-remove").mouseenter(function() {
           this.oldval = $(this).html();
           $(this).css("min-width", $(this).width());
@@ -135,8 +160,17 @@ $(function(){
         })
       }
       else if (variant == 'mobile') {
-        tag = $("<a href='"+((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"))+"'><span>#"+tid+"</span><span class='cb-uri'>"+newposts+"</span>"
-               +"<span class='cb-uri watch-remove'><i class='fa fa-minus'></i></span>");	
+        tag = $("<a></a>").attr("href", href);
+        $("<span></span>").text("#" + tid).appendTo(tag);
+
+        var postsSpanMobile = $("<span class='cb-uri'></span>").appendTo(tag);
+        if (newpostsIsIcon) {
+          $("<i class='fa fa-ban-circle'></i>").appendTo(postsSpanMobile);
+        } else {
+          postsSpanMobile.text(newposts);
+        }
+
+        $("<span class='cb-uri watch-remove'><i class='fa fa-minus'></i></span>").appendTo(tag);
       }
 
       tag.attr('data-thread', tid)
@@ -213,7 +247,10 @@ $(function(){
 	  link.off().mouseenter(function() {
 	    $('.cb-menu').remove();
 
-	    var board = $(this).attr("data-board");
+	    var board = sanitize_board_name($(this).attr("data-board"));
+	    if (!board) {
+	      return;
+	    }
 
 	    var wl = construct_watchlist_for(board, "desktop").appendTo($(this))
               .css("top", $(this).position().top
@@ -235,7 +272,10 @@ $(function(){
     }
 
     if (device_type == "mobile" && (active_page == 'thread' || active_page == 'index')) {
-      var board = $('form[name="post"] input[name="board"]').val();
+      var board = sanitize_board_name($('form[name="post"] input[name="board"]').val());
+      if (!board) {
+        return;
+      }
 
       var where = $('div[style="text-align:right"]').first();
       $('.watch-menu').remove();
