@@ -6,9 +6,64 @@ if (active_page == 'catalog') $(function(){
 		localStorage.catalog = JSON.stringify(catalog);
 	}
 
+	// Merge sort
+	function mergeSort(arr, compare) {
+		if (arr.length <= 1) {
+			return arr;
+		}
+
+		var middle = Math.floor(arr.length / 2);
+		var left = mergeSort(arr.slice(0, middle), compare);
+		var right = mergeSort(arr.slice(middle), compare);
+
+		return merge(left, right, compare);
+	}
+
+	function merge(left, right, compare) {
+		var result = [];
+		var i = 0;
+		var j = 0;
+
+		while (i < left.length && j < right.length) {
+			if (compare(left[i], right[j]) <= 0) {
+				result.push(left[i++]);
+			} else {
+				result.push(right[j++]);
+			}
+		}
+
+		while (i < left.length) {
+			result.push(left[i++]);
+		}
+
+		while (j < right.length) {
+			result.push(right[j++]);
+		}
+
+		return result;
+	}
+
 	$("#sort_by").change(function(){
 		var value = this.value;
-		$('#Grid').mixItUp('sort', (value == "random" ? value : "sticky:desc " + value));
+
+		if (value == "random") {
+			$('#Grid').mixItUp('sort', value);
+		} else {
+			var items = $('#Grid .grid-li').get();
+
+			items = mergeSort(items, function(a, b) {
+				var aValue = $(a).attr('data-' + value);
+				var bValue = $(b).attr('data-' + value);
+
+				aValue = aValue !== undefined ? aValue.toLowerCase() : '';
+				bValue = bValue !== undefined ? bValue.toLowerCase() : '';
+
+				return aValue.localeCompare(bValue);
+			});
+
+			$('#Grid').append(items);
+		}
+
 		catalog.sort_by = value;
 		localStorage.catalog = JSON.stringify(catalog);
 	});
