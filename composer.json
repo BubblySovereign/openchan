@@ -1,6 +1,6 @@
 {
-    "name": "vichan-devel/vichan",
-    "description": "vichan imageboard",
+    "name": "BubblySovereign/openchan",
+    "description": "openchan imageboard",
     "type": "project",
     "config": {
         "platform": {
@@ -9,9 +9,9 @@
     },
     "require": {
         "php": ">=8.3",
-        "ext-mbstring": ">=7.4",
-        "ext-gd": ">=7.4",
-        "ext-pdo": ">=7.4",
+        "ext-mbstring": ">=8.3",
+        "ext-gd": ">=8.3",
+        "ext-pdo": ">=8.3",
         "twig/twig": "^3.17",
         "phpmyadmin/twig-i18n-extension": "^5.0.2",
         "lifo/ip": "^1.0",
@@ -43,23 +43,11 @@
             "inc/context.php"
         ]
     },
-    "license": "Tinyboard + vichan",
+    "license": "AGPL",
     "authors": [
         {
-            "name": "savetheinternet",
-            "homepage": "https://github.com/savetheinternet"
-        },
-        {
-            "name": "czaks",
-            "homepage": "https://github.com/czaks"
-        },
-        {
-            "name": "ctrlcctrlv",
-            "homepage": "https://github.com/ctrlcctrlv"
-        },
-        {
-            "name": "h00j",
-            "homepage": "https://github.com/h00j"
+            "name": "BubblySovereign",
+            "homepage": "https://github.com/BubblySovereign"
         }
     ]
 }
