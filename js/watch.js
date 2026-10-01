@@ -106,8 +106,22 @@ $(function(){
     storage_save(st);
     return is_threadwatched(bc, thread);
   };
+  var sanitize_board_name = function(board) {
+    if (typeof board !== "string") {
+      return null;
+    }
+    board = board.replace(/^\/+|\/+$/g, "");
+    if (!/^[A-Za-z0-9_-]+$/.test(board)) {
+      return null;
+    }
+    return board;
+  };
   var construct_watchlist_for = function(board, variant) {
+    board = sanitize_board_name(board);
     var list = $("<div class='boardlist top cb-menu watch-menu'></div>");
+    if (!board) {
+      return list;
+    }
     list.attr("data-board", board);
 
     if (storage()[board] && storage()[board].threads)
@@ -233,7 +247,10 @@ $(function(){
 	  link.off().mouseenter(function() {
 	    $('.cb-menu').remove();
 
-	    var board = $(this).attr("data-board");
+	    var board = sanitize_board_name($(this).attr("data-board"));
+	    if (!board) {
+	      return;
+	    }
 
 	    var wl = construct_watchlist_for(board, "desktop").appendTo($(this))
               .css("top", $(this).position().top
@@ -255,7 +272,10 @@ $(function(){
     }
 
     if (device_type == "mobile" && (active_page == 'thread' || active_page == 'index')) {
-      var board = $('form[name="post"] input[name="board"]').val();
+      var board = sanitize_board_name($('form[name="post"] input[name="board"]').val());
+      if (!board) {
+        return;
+      }
 
       var where = $('div[style="text-align:right"]').first();
       $('.watch-menu').remove();
