@@ -1,3 +1,10 @@
+openchan
+========================================================
+
+About
+------------
+openchan is a fork of vichan, with the difference that openchan is geared towards being lightweight.
+
 Installation
 -------------
 1. Install packages
@@ -15,8 +22,6 @@ Installation
 
 Please remember to change the administrator account password.
 
-See also: [Configuration Basics](https://github.com/vichan-devel/vichan/wiki/config).
-
 License
 --------
-See [LICENSE.md](http://github.com/vichan-devel/vichan/blob/master/LICENSE.md).
+See [LICENSE](https://github.com/BubblySovereign/openchan/blob/master/LICENSE).
