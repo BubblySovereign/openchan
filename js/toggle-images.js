@@ -29,9 +29,36 @@ $(document).ready(function(){
 			.addClass('hidden');
 	};
 
+	var sanitizeImageSrc = function(url) {
+		if (!url || typeof url !== 'string') return null;
+		var trimmed = $.trim(url);
+		if (!trimmed || /[\u0000-\u001F\u007F]/.test(trimmed)) return null;
+
+		// Strictly allow common safe image data URIs only.
+		if (/^data:image\/(?:png|gif|jpeg|jpg|webp|bmp);base64,[a-z0-9+/=\s]+$/i.test(trimmed)) {
+			return trimmed;
+		}
+
+		// Allow only relative, protocol-relative, blob, and http(s) URLs.
+		if (/^(\/|\.\/|\.\.\/|\/\/|blob:|https?:)/i.test(trimmed)) {
+			try {
+				var parsed = new URL(trimmed, window.location.href);
+				if (/^(https?:|blob:)$/.test(parsed.protocol) || /^(\/|\.\/|\.\.\/|\/\/)/.test(trimmed)) {
+					return trimmed;
+				}
+			} catch (e) {
+				return null;
+			}
+		}
+
+		return null;
+	};
+
 	var restoreImage = function() {
+		var originalSrc = $(this).attr('data-orig');
+		var safeSrc = sanitizeImageSrc(originalSrc);
 		$(this)
-			.attr('src', $(this).attr('data-orig'))
+			.attr('src', safeSrc ? safeSrc : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
 			.removeClass('hidden');
 	};
 
