@@ -18,9 +18,15 @@ $(document).ready(function(){
 		return; // nothing to expand
 
 	var do_expand = function() {
-		$(this)
-			.html($(this).text().replace(_("Click reply to view."), '<a href="javascript:void(0)">'+_("Click to expand")+'</a>.'))
-			.find('a').click(window.expand_fun = function() {
+		var omitted = $(this);
+		var originalText = omitted.text();
+		var marker = _("Click reply to view.");
+		var prefixText = originalText.replace(marker, '');
+		var expandLink = $('<a href="javascript:void(0)"></a>').text(_("Click to expand"));
+
+		omitted.empty().text(prefixText).append(expandLink).append('.');
+
+		expandLink.click(window.expand_fun = function() {
 				var thread = $(this).parents('[id^="thread_"]');
 				var id = thread.attr('id').replace(/^thread_/, '');
 				$.ajax({
