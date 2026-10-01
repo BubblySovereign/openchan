@@ -3,7 +3,7 @@ $(document).ready(function(){
 var generateList = function(){
 	var favStor = [];
   	for(var i=1; i<favorites.length+1; i++){
-  		favStor.push($("#sortable > div:nth-child("+i+")").html());
+  		favStor.push($("#sortable > div:nth-child("+i+")").text());
   	}
 	return favStor;
 } //This will generate a list of boards based off of the list on the screen
@@ -15,7 +15,7 @@ function removeBoard(boardNumber){
 	add_favorites();
 } //This removes a board from favorites, localStorage.favorites and the page
 function addBoard(){
-	$("#sortable").append("<div>"+($("#plusBox").val())+"</div>");
+	$("#sortable").append($("<div>").text($("#plusBox").val()));
 	$("#minusList").append( $('<div data-board="'+favorites.length+'" style="cursor: pointer; margin-right: 5px">-</div>').on('click', function(e){removeBoard($(this).data('board'));}) );
 	favorites.push($("#plusBox").val());
 	localStorage.favorites = JSON.stringify(favorites);
@@ -29,7 +29,7 @@ Options.add_tab('fav-tab','star',_("Favorites"));
 //Pregenerating list of boards 
 var favList = $('<div id="sortable" style="cursor: pointer; display: inline-block">');
 for(var i=0; i<favorites.length; i++){
-    favList.append( $('<div>'+favorites[i]+'</div>') );
+    favList.append($('<div>').text(favorites[i]));
 } 
 
 //Creating list of minus symbols to remove unwanted boards
@@ -39,7 +39,8 @@ for(var i=0; i<favorites.length; i++){
 } 
 
 //Help message so people understand how sorting boards works
-$("<span>"+_("Drag the boards to sort them.")+"</span><br><br>").appendTo(Options.get_tab('fav-tab').content);
+$('<span>').text(_("Drag the boards to sort them.")).appendTo(Options.get_tab('fav-tab').content);
+$('<br><br>').appendTo(Options.get_tab('fav-tab').content);
 
 //Adding list of boards and minus symbols to remove boards with
 $(minusList).appendTo(Options.get_tab('fav-tab').content); //Adding the list of minus symbols to the tab
