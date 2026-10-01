@@ -29,9 +29,16 @@ $(document).ready(function(){
 			.addClass('hidden');
 	};
 
+	var isSafeImageSrc = function(url) {
+		if (!url || typeof url !== 'string') return false;
+		var trimmed = $.trim(url);
+		return /^(https?:|\/|\.\/|\.\.\/|data:image\/|blob:|\/\/)/i.test(trimmed);
+	};
+
 	var restoreImage = function() {
+		var originalSrc = $(this).attr('data-orig');
 		$(this)
-			.attr('src', $(this).attr('data-orig'))
+			.attr('src', isSafeImageSrc(originalSrc) ? originalSrc : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
 			.removeClass('hidden');
 	};
 
