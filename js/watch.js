@@ -113,18 +113,29 @@ $(function(){
     if (storage()[board] && storage()[board].threads)
     for (var tid in storage()[board].threads) {
       var newposts = "(0)";
+      var newpostsIsIcon = false;
       if (status && status[board] && status[board].threads && status[board].threads[tid]) {
         if (status[board].threads[tid] == -404) {
-          newposts = "<i class='fa fa-ban-circle'></i>";
+          newpostsIsIcon = true;
         }
         else {
           newposts = "("+status[board].threads[tid]+")";
         }
       }
 
+      var href = ((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"));
       var tag;
       if (variant == 'desktop') {
-        tag = $("<a href='"+((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"))+"'><span>#"+tid+"</span><span class='cb-uri watch-remove'>"+newposts+"</span>");
+        tag = $("<a></a>").attr("href", href);
+        $("<span></span>").text("#" + tid).appendTo(tag);
+
+        var removeSpanDesktop = $("<span class='cb-uri watch-remove'></span>").appendTo(tag);
+        if (newpostsIsIcon) {
+          $("<i class='fa fa-ban-circle'></i>").appendTo(removeSpanDesktop);
+        } else {
+          removeSpanDesktop.text(newposts);
+        }
+
 	tag.find(".watch-remove").mouseenter(function() {
           this.oldval = $(this).html();
           $(this).css("min-width", $(this).width());
@@ -135,8 +146,17 @@ $(function(){
         })
       }
       else if (variant == 'mobile') {
-        tag = $("<a href='"+((storage()[board].slugs && storage()[board].slugs[tid]) || (modRoot+board+"/res/"+tid+".html"))+"'><span>#"+tid+"</span><span class='cb-uri'>"+newposts+"</span>"
-               +"<span class='cb-uri watch-remove'><i class='fa fa-minus'></i></span>");	
+        tag = $("<a></a>").attr("href", href);
+        $("<span></span>").text("#" + tid).appendTo(tag);
+
+        var postsSpanMobile = $("<span class='cb-uri'></span>").appendTo(tag);
+        if (newpostsIsIcon) {
+          $("<i class='fa fa-ban-circle'></i>").appendTo(postsSpanMobile);
+        } else {
+          postsSpanMobile.text(newposts);
+        }
+
+        $("<span class='cb-uri watch-remove'><i class='fa fa-minus'></i></span>").appendTo(tag);
       }
 
       tag.attr('data-thread', tid)
