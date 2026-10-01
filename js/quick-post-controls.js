@@ -20,25 +20,34 @@ $(document).ready(function(){
 		var submitButton;
 		
 		if(this.checked) {
-			var post_form = $('<form class="post-actions" method="post" style="margin:10px 0 0 0">' +
-				'<div style="text-align:right">' +
-					(!thread ? '<hr>' : '') +
-					
-					'<input type="hidden" name="delete_' + id + '">' +
-					
-					'<label for="password_' + id + '">'+_("Password")+'</label>: ' +
-					'<input id="password_' + id + '" type="password" name="password" size="11" maxlength="18">' +
-					'<input title="'+_('Delete file only')+'" type="checkbox" name="file" id="delete_file_' + id + '">' +
-						'<label for="delete_file_' + id + '">'+_('File')+'</label>' +
-					' <input type="submit" name="delete" value="'+_('Delete')+'">' +
-				
-					'<br>' +
-				
-					'<label for="reason_' + id + '">'+_('Reason')+'</label>: ' +
-					'<input id="reason_' + id + '" type="text" name="reason" size="20" maxlength="100">' +
-					' <input type="submit" name="report" value="'+_('Report')+'">' +
-				'</div>' +
-			'</form>');
+			var post_form = $('<form>', {
+				'class': 'post-actions',
+				'method': 'post',
+				'style': 'margin:10px 0 0 0'
+			});
+			var post_form_container = $('<div>', { style: 'text-align:right' });
+
+			if(!thread) {
+				post_form_container.append($('<hr>'));
+			}
+
+			post_form_container
+				.append($('<input>', { type: 'hidden', name: 'delete_' + id }))
+				.append($('<label>', { 'for': 'password_' + id }).text(_("Password")))
+				.append(': ')
+				.append($('<input>', { id: 'password_' + id, type: 'password', name: 'password', size: 11, maxlength: 18 }))
+				.append($('<input>', { title: _('Delete file only'), type: 'checkbox', name: 'file', id: 'delete_file_' + id }))
+				.append($('<label>', { 'for': 'delete_file_' + id }).text(_('File')))
+				.append(' ')
+				.append($('<input>', { type: 'submit', name: 'delete', value: _('Delete') }))
+				.append($('<br>'))
+				.append($('<label>', { 'for': 'reason_' + id }).text(_('Reason')))
+				.append(': ')
+				.append($('<input>', { id: 'reason_' + id, type: 'text', name: 'reason', size: 20, maxlength: 100 }))
+				.append(' ')
+				.append($('<input>', { type: 'submit', name: 'report', value: _('Report') }));
+
+			post_form.append(post_form_container);
 			post_form
 				.attr('action', $('form[name="post"]:first').attr('action'))
 				.append($('input[name=board]:first').clone())
