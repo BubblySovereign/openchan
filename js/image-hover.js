@@ -139,7 +139,10 @@ function imageHoverStart(e) { //Pashe, anonish, WTFPL
 	
 	if (isVideo(getFileExtension(fullUrl))) {return;}
 	
-	hoverImage = $('<img id="chx_hoverImage" src="'+fullUrl+'" />');
+	hoverImage = $('<img>', {
+		id: 'chx_hoverImage',
+		src: fullUrl
+	});
 
 	if (getSetting("imageHoverFollowCursor")) {
 		var size = $this.parents('.file').find('.unimportant').text().match(/\b(\d+)x(\d+)\b/),
