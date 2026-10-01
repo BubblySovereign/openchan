@@ -15,6 +15,11 @@
 function catalog() {
     var board = $("input[name='board']");
     var boardValue = board.first().val();
+    boardValue = (boardValue || '').toString().trim();
+
+    if (!/^[A-Za-z0-9_-]+$/.test(boardValue)) {
+        return;
+    }
 
     var catalog_url = '';
     if (window.location.href.includes('mod.php?/')) {
