@@ -92,6 +92,23 @@ function initImageHover() { //Pashe, influenced by tux, et al, WTFPL
 	});
 }
 
+function sanitizeHoverImageUrl(url) {
+	if (typeof url !== "string") {return null;}
+	url = $.trim(url);
+	if (!url) {return null;}
+
+	// Allow only safe URL forms for image loading.
+	// - absolute http(s)
+	// - protocol-relative
+	// - root-relative
+	// - relative paths
+	if (/^(https?:)?\/\//i.test(url) || url.charAt(0) === "/" || /^[^:?#\s]+([/?#].*)?$/.test(url)) {
+		return url;
+	}
+
+	return null;
+}
+
 function imageHoverStart(e) { //Pashe, anonish, WTFPL
 	var hoverImage = $("#chx_hoverImage");
 	
@@ -136,6 +153,9 @@ function imageHoverStart(e) { //Pashe, anonish, WTFPL
 		fullUrl = $this.attr("data-fullimage");
 		if (!isImage(getFileExtension(fullUrl))) {fullUrl = $this.attr("src");}
 	}
+
+	fullUrl = sanitizeHoverImageUrl(fullUrl);
+	if (!fullUrl) {return;}
 	
 	if (isVideo(getFileExtension(fullUrl))) {return;}
 	
