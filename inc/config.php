@@ -287,40 +287,6 @@
 	//);
 	$config['simple_spam'] = false;
 
-	$config['captcha'] = [
-		// Can be false, 'recaptcha', 'hcaptcha' or 'native'.
-		'provider' => false,
-		/*
-		 * If not false, the captcha is dynamically injected on the client if the web server set the `captcha-required`
-		 * cookie to 1. The configuration value should be set the IP for which the captcha should be verified.
-		 *
-		 * Example:
-		 *
-		 * // Verify the captcha for users sending posts from the loopback address.
-		 * $config['captcha']['dynamic'] = '127.0.0.1';
-		 */
-		'dynamic' => false,
-		'recaptcha' => [
-			'sitekey' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-			'secret' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
-		],
-		'hcaptcha' => [
-			'sitekey' => '10000000-ffff-ffff-ffff-000000000001',
-			'secret' => '0x0000000000000000000000000000000000000000',
-		],
-		// To enable the native captcha you need to change a couple of settings. Read more at: /inc/captcha/readme.md
-		'native' => [
-			// Custom captcha get provider path (if not working get the absolute path aka your url).
-			'provider_get' => '/inc/captcha/entrypoint.php',
-			// Custom captcha check provider path
-			'provider_check' => '/inc/captcha/entrypoint.php',
-			// Custom captcha extra field (eg. charset)
-			'extra' => 'abcdefghijklmnopqrstuvwxyz',
-			// New thread captcha. Require solving a captcha to post a thread.
-			'new_thread_capt' => false
-		]
-	];
-
 	// Ability to lock a board for normal users and still allow mods to post.  Could also be useful for making an archive board
 	$config['board_locked'] = false;
 
@@ -1123,7 +1089,6 @@
 	// $config['additional_javascript'][] = 'js/auto-reload.js';
 	// $config['additional_javascript'][] = 'js/post-hover.js';
 	// $config['additional_javascript'][] = 'js/style-select.js';
-	// $config['additional_javascript'][] = 'js/captcha.js';
 
 	// Where these script files are located on the web. Defaults to $config['root'].
 	// $config['additional_javascript_url'] = 'http://static.example.org/vichan-javascript-stuff/';
@@ -1266,7 +1231,6 @@
 		'delete_too_late'		=> _('You cannot delete a post this old.'),
 		'mime_exploit'			=> _('MIME type detection XSS exploit (IE) detected; post discarded.'),
 		'invalid_embed'			=> _('Couldn\'t make sense of the URL of the video you tried to embed.'),
-		'captcha'				=> _('You seem to have mistyped the verification.'),
 		'flag_undefined'		=> _('The flag %s is undefined, your PHP version is too old!'),
 		'flag_wrongtype'		=> _('defined_flags_accumulate(): The flag %s is of the wrong type!'),
 		'remote_io_error'		=> _('IO error while interacting with a remote service.'),
@@ -2035,9 +1999,6 @@
 	// If set to 0, it won't upgrade hashes using old password encryption schema, only create new.
 	// You can set it to a higher value, to further migrate to other password hashing function.
 	$config['password_crypt_version'] = 1;
-
-	// Use CAPTCHA for reports?
-	$config['report_captcha'] = false;
 
 	// Allowed HTML tags in ?/edit_pages.
 	$config['allowed_html'] = 'a[href|title],p,br,li,ol,ul,strong,em,u,h2,b,i,tt,div,img[src|alt|title],hr';
