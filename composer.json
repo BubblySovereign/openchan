@@ -17,7 +17,6 @@
         "lifo/ip": "^1.0",
         "gettext/gettext": "^5.5",
         "mrclay/minify": "^4.0.2",
-        "dapphp/securimage": "dev-nextgen",
         "erusev/parsedown":  "^1.7.4",
         "geoip2/geoip2": "^3.4"
     },
@@ -39,7 +38,6 @@
             "inc/functions/net.php",
             "inc/functions/num.php",
             "inc/functions/theme.php",
-            "inc/service/captcha-queries.php",
             "inc/context.php"
         ]
     },
