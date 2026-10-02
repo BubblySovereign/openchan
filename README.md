@@ -12,7 +12,7 @@ Installation
    
 1.	Get the latest development version with:
 
-        git clone https://github.com/BubblySovereign/vichan-fixed.git
+        git clone https://github.com/BubblySovereign/openchan.git
 
 2.	run ```composer install``` inside the directory
 3.	Navigate to ```install.php``` in your web browser and follow the
