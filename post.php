@@ -4,6 +4,7 @@
  */
 
 require_once 'inc/bootstrap.php';
+use GeoIp2\Database\Reader;
 
 use Vichan\{Context, WebDependencyFactory};
 use Vichan\Data\Driver\{LogDriver, HttpDriver};
@@ -13,6 +14,45 @@ use Vichan\Functions\Format;
 /**
  * Utility functions
  */
+
+/**
+ * Lookup the posting IP in the bundled GeoIP2 country database.
+ *
+ * @return array{0:string,1:string} ISO country code and display name.
+ */
+function geoip2_country_lookup() {
+	static $country = null;
+
+	if ($country !== null) {
+		return $country;
+	}
+
+	$country = array('us', 'United States');
+	$database_path = 'inc/lib/geoip2/GeoLite2-Country.mmdb';
+
+	if (!class_exists(Reader::class) || !is_readable($database_path)) {
+		return $country;
+	}
+
+	try {
+		$reader = new Reader($database_path);
+		$record = $reader->country($_SERVER['REMOTE_ADDR']);
+		$reader->close();
+
+		if (!empty($record->country->isoCode)) {
+			$country[0] = strtolower($record->country->isoCode);
+		}
+
+		if (!empty($record->country->name)) {
+			$country[1] = $record->country->name;
+		}
+	}
+	catch (Exception $e) {
+		// Keep fallback values if lookup fails.
+	}
+
+	return $country;
+}
 
 /**
  * Get the md5 hash of the file.
@@ -970,38 +1010,61 @@ if (isset($_POST['delete'])) {
 
 	if (!$dropped_post)
 	if (($config['country_flags'] && !$config['allow_no_country']) || ($config['country_flags'] && $config['allow_no_country'] && !isset($_POST['no_country']))) {
-		$gi=geoip_open('inc/lib/geoip/GeoIPv6.dat', GEOIP_STANDARD);
-
-		function ipv4to6($ip) {
-			if (strpos($ip, ':') !== false) {
-				if (strpos($ip, '.') > 0)
-					$ip = substr($ip, strrpos($ip, ':')+1);
-				else return $ip;  //native ipv6
-			}
-			$iparr = array_pad(explode('.', $ip), 4, 0);
-			$part7 = base_convert(($iparr[0] * 256) + $iparr[1], 10, 16);
-			$part8 = base_convert(($iparr[2] * 256) + $iparr[3], 10, 16);
-			return '::ffff:'.$part7.':'.$part8;
-		}
-
-		if ($country_code = geoip_country_code_by_addr_v6($gi, ipv4to6($_SERVER['REMOTE_ADDR']))) {
+		list($country_code, $country_name) = geoip2_country_lookup();
+		if ($country_code) {
 			if (!in_array(strtolower($country_code), array('eu', 'ap', 'o1', 'a1', 'a2')))
 				$post['body'] .= "\n<tinyboard flag>".strtolower($country_code)."</tinyboard>".
-				"\n<tinyboard flag alt>".geoip_country_name_by_addr_v6($gi, ipv4to6($_SERVER['REMOTE_ADDR']))."</tinyboard>";
+				"\n<tinyboard flag alt>".$country_name."</tinyboard>";
 		}
 	}
 
-	if ($config['user_flag'] && isset($_POST['user_flag']) && !empty($_POST['user_flag'])) {
-		$user_flag = $_POST['user_flag'];
+	if ($config['user_flag'] && isset($_POST['user_flag'])) {
+		$raw_flags = strtolower(trim($_POST['user_flag']));
 
-		if (!isset($config['user_flags'][$user_flag])) {
-			error(_('Invalid flag selection!'));
+		if ($raw_flags !== '') {
+			if ($config['multiple_flags']) {
+				if (strlen($raw_flags) > 300) {
+					error(_('Invalid flag selection!'));
+				}
+				$selected_flags = explode(',', str_replace(' ', '', $raw_flags));
+			}
+			else {
+				$selected_flags = array($raw_flags);
+			}
+
+			$normalized_flags = array();
+			$normalized_alts = array();
+			$country_code = null;
+			$country_name = null;
+
+			foreach ($selected_flags as $selected_flag) {
+				$selected_flag = trim($selected_flag);
+				if ($selected_flag === '')
+					continue;
+
+				if (!isset($config['user_flags'][$selected_flag])) {
+					error(_('Invalid flag selection!'));
+				}
+
+				if ($selected_flag === 'country') {
+					if ($country_code === null || $country_name === null) {
+						list($country_code, $country_name) = geoip2_country_lookup();
+					}
+
+					$normalized_flags[] = $country_code;
+					$normalized_alts[] = $country_name;
+					continue;
+				}
+
+				$normalized_flags[] = strtolower($selected_flag);
+				$normalized_alts[] = $config['user_flags'][$selected_flag];
+			}
+
+			if (!empty($normalized_flags)) {
+				$post['body'] .= "\n<tinyboard flag>" . implode(',', $normalized_flags) . "</tinyboard>" .
+					"\n<tinyboard flag alt>" . implode(',', $normalized_alts) . "</tinyboard>";
+			}
 		}
-
-		$flag_alt = isset($user_flag_alt) ? $user_flag_alt : $config['user_flags'][$user_flag];
-
-		$post['body'] .= "\n<tinyboard flag>" . strtolower($user_flag) . "</tinyboard>" .
-			"\n<tinyboard flag alt>" . $flag_alt . "</tinyboard>";
 	}
 
 	if ($config['allowed_tags'] && $post['op'] && isset($_POST['tag']) && isset($config['allowed_tags'][$_POST['tag']])) {
