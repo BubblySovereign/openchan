@@ -627,14 +627,6 @@ if (file_exists($config['has_installed'])) {
 				  UNIQUE KEY `u_board_id` (`board`, `id`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 			') or error(db_error());
-		case '5.1.3':
-			query('CREATE TABLE IF NOT EXISTS ``captchas`` (
-			  	`cookie` varchar(50),
-			  	`extra` varchar(200),
-			  	`text` varchar(255),
-			  	`created_at` int(11),
-			  	PRIMARY KEY (`cookie`,`extra`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;') or error(db_error());
 		case false:
 			// TODO: enhance Tinyboard -> vichan upgrade path.
 			query("CREATE TABLE IF NOT EXISTS ``search_queries`` (  `ip` varchar(39) NOT NULL,  `time` int(11) NOT NULL,  `query` text NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;") or error(db_error());
