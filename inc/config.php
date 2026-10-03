@@ -590,22 +590,22 @@
 	$config['hide_email'] = false;
 
 	// Attach country flags to posts.
-	$config['country_flags'] = false;
+	//$config['country_flags'] = false;
 
 	// Allow the user to decide whether or not he wants to display his country
 	$config['allow_no_country'] = false;
 
 	// Load all country flags from one file
-	$config['country_flags_condensed'] = true;
-	$config['country_flags_condensed_css'] = 'static/flags/flags.css';
+	//$config['country_flags_condensed'] = true;
+	//$config['country_flags_condensed_css'] = 'static/flags/flags.css';
 
 	// Allow the user choose a /pol/-like user_flag that will be shown in the post. For the user flags, please be aware
 	// that you will have to disable BOTH country_flags and contry_flags_condensed optimization (at least on a board
 	// where they are enabled).
-	$config['user_flag'] = false;
+	//$config['user_flag'] = false;
 
 	// List of user_flag the user can choose. Flags must be placed in the directory set by $config['uri_flags']
-	$config['user_flags'] = array();
+	//$config['user_flags'] = array();
 	/* example: 
 	$config['user_flags'] = array (
 		'nz' => 'Nazi',
@@ -829,8 +829,6 @@
 	$config['file_icons'] = [
 		'default' => 'file.png',
 		'zip' => 'zip.png',
-		'webm' => 'video.png',
-		'mp4' => 'video.png'
 	];
 	// Example: Custom thumbnail for certain file extension.
 	// $config['file_icons']['extension'] = 'some_file.png';
@@ -861,15 +859,6 @@
 	$config['show_ratio'] = false;
 	// Display the file's original filename.
 	$config['show_filename'] = true;
-
-	// WebM Settings
-	$config['webm'] = [
-		'use_ffmpeg' => false,
-		'allow_audio' => false,
-		'max_length' => 120,
-		'ffmpeg_path' => 'ffmpeg',
-		'ffprobe_path' => 'ffprobe'
-	];
 
 	// Display image identification links for ImgOps, regex.info/exif, Google Images and iqdb.
 	$config['image_identification'] = false;
@@ -1054,7 +1043,7 @@
 
 	// Display flags (when available). This config option has no effect unless poster flags are enabled (see
 	// $config['country_flags']). Disable this if you want all previously-assigned flags to be hidden.
-	$config['display_flags'] = true;
+	$config['display_flags'] = false;
 
 	// Location of post flags/icons (where "%s" is the flag name). Defaults to static/flags/%s.png.
 	// $config['uri_flags'] = 'http://static.example.org/flags/%s.png';
@@ -1220,18 +1209,12 @@
 		'unknownext'			=> _('Unknown file extension.'),
 		'filesize'				=> _('Maximum file size: %maxsz% bytes<br>Your file\'s size: %filesz% bytes'),
 		'maxsize'				=> _('The file was too big.'),
-		'genwebmerror'			=> _('There was a problem processing your webm.'),
-		'invalidwebm' 			=> _('Invalid webm uploaded.'),
-		'webmhasaudio' 			=> _('The uploaded webm contains an audio or another type of additional stream.'),
-		'webmtoolong'			=>_('The uploaded webm is longer than %d seconds.'),
 		'fileexists'			=> _('That file <a href=>"%s">already exists</a>!'),
 		'fileexistsinthread'	=> _('That file <a href=>"%s">already exists</a> in this thread!'),
 		'delete_too_soon'		=> _('You\'ll have to wait another %s before deleting that.'),
 		'delete_too_late'		=> _('You cannot delete a post this old.'),
 		'mime_exploit'			=> _('MIME type detection XSS exploit (IE) detected; post discarded.'),
 		'invalid_embed'			=> _('Couldn\'t make sense of the URL of the video you tried to embed.'),
-		'flag_undefined'		=> _('The flag %s is undefined, your PHP version is too old!'),
-		'flag_wrongtype'		=> _('defined_flags_accumulate(): The flag %s is of the wrong type!'),
 		'remote_io_error'		=> _('IO error while interacting with a remote service.'),
 		'local_io_error'		=> _('IO error while interacting with a local resource or service.'),
 
