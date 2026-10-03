@@ -772,8 +772,8 @@
 	 *					   instead of `convert` for resizing GIFs. It's faster and resulting animated
 	 *					   thumbnails have less artifacts than if resized with ImageMagick.
 	 */
-	$config['thumb_method'] = 'gd';
-	// $config['thumb_method'] = 'convert';
+	// $config['thumb_method'] = 'gd';
+	$config['thumb_method'] = 'gm';
 
 	// Command-line options passed to ImageMagick when using `convert` for thumbnailing. Don't touch the
 	// placement of "%s" and "%d".
@@ -877,7 +877,6 @@
 	$config['image_identification_imgops'] = true;
 	$config['image_identification_exif'] = true;
 	$config['image_identification_google'] = true;
-	$config['image_identification_yandex'] = true;
 	// Anime/manga search engine.
 	$config['image_identification_iqdb'] = false;
 
