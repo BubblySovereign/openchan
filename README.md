@@ -8,7 +8,7 @@ openchan is a fork of vichan, with the difference that openchan is geared toward
 Installation
 -------------
 1. Install packages
-    ```apt install php-{fpm,bcmath,gd,pdo,mbstring,mysql,redis} composer mariadb-server imagemagick graphicsmagick gifsicle git nginx vim python3-certbot-nginx```
+    ```apt install php-{fpm,bcmath,gd,pdo,mbstring,mysql,redis} composer mariadb-server graphicsmagick gifsicle git nginx vim python3-certbot-nginx```
    
 1.	Get the latest development version with:
 
