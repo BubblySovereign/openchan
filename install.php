@@ -794,13 +794,6 @@ if ($step == 0) {
 		),
 		array(
 			'category' => 'Image processing',
-			'name' => '`identify` (command-line ImageMagick)',
-			'result' => $can_exec && shell_exec('which identify'),
-			'required' => false,
-			'message' => '(Optional) `identify` was not found or executable; command-line ImageMagick image processing cannot be enabled.',
-		),
-		array(
-			'category' => 'Image processing',
 			'name' => '`gm` (command-line GraphicsMagick)',
 			'result' => $can_exec && shell_exec('which gm'),
 			'required' => false,
