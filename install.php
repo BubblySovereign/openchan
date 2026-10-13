@@ -5,22 +5,25 @@ define('VERSION', '5.2.2');
 require 'inc/bootstrap.php';
 loadConfig();
 
-// Salt generators
 class SaltGen {
-	public $salt_length = 128;
+    public $salt_length = 128;
 
-	// Best function I could think of for non-SSL PHP 5
-	private function generate_install_salt() {
-		$ret = "";
+    private function generate_install_salt() {
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $strong = false;
+            $bytes = openssl_random_pseudo_bytes($this->salt_length, $strong);
 
-		// This is bad! But what else can we do sans OpenSSL?
-		for ($i = 0; $i < $this->salt_length; ++$i) {
-			$s = pack("c", mt_rand(0,255));
-			$ret = $ret . $s;
-		}
+            if ($bytes !== false && $strong) {
+                return base64_encode($bytes);
+            }
+        }
 
-		return base64_encode($ret);
-	}
+        // Fail safely instead of generating a predictable salt.
+        throw new RuntimeException(
+            'A cryptographically secure random number generator is required.'
+        );
+    }
+}
 
 	// Best function of the lot. Works with any PHP version as long as OpenSSL extension is on
 	private function generate_install_salt_openssl() {
