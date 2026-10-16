@@ -14,7 +14,7 @@ A computer running a Unix or Unix-like OS(openchan has been specifically tested 
 
 Step 1. Create openchan's database from the included install.sql file. Enter mysql and create an empty database named 'openchan'.
 ```
-mysql -uroot -p infinity < install.sql
+mysql -uroot -p openchan < install.sql
 ```
 
 Step 2. Openchan can function in a *very* barebones fashion after the first two steps, but you should probably install these additional packages if you want to seriously run it and/or contribute to it. Make sure to run the below as root:
